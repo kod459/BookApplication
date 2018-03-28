@@ -7,7 +7,7 @@
     tools:context="com.example.kod45.bookapplication.activity.CustomerWelcome">
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/signOutCustomer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign Out"
