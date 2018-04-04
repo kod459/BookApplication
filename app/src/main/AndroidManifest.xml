@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.CustomerWelcome" />
-        <activity android:name=".activity.AdminWelcomePage"></activity>
+        <activity android:name=".activity.AdminWelcomePage" />
+        <activity android:name=".activity.AddBookActivity"></activity>
     </application>
 
 </manifest>
