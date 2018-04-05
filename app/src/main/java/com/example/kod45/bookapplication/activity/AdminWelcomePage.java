@@ -14,7 +14,7 @@ public class AdminWelcomePage extends AppCompatActivity {
 
     FirebaseAuth mAuth;
 
-    Button signOut, addBook;
+    Button signOut, addBook, searchBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +22,9 @@ public class AdminWelcomePage extends AppCompatActivity {
         setContentView(R.layout.activity_admin_welcome_page);
         mAuth = FirebaseAuth.getInstance();
 
-        signOut = (Button)findViewById(R.id.button3);
-        addBook = (Button)findViewById(R.id.GoToAdd);
+        signOut = (Button)findViewById(R.id.signout1);
+        addBook = (Button)findViewById(R.id.goToAdd);
+        searchBooks = (Button)findViewById(R.id.goToSearch);
 
         signOut.setOnClickListener(new View.OnClickListener()
         {
@@ -47,6 +48,15 @@ public class AdminWelcomePage extends AppCompatActivity {
             }
         });
 
+        searchBooks.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminWelcomePage.this, SearchBooks.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
 
 

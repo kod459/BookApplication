@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Toast.makeText(getApplicationContext(), "Successfully signed in with: " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                    if(user.getEmail().equalsIgnoreCase("admin@gmail.com")) {
+                    if(user.getEmail().equals("admin@gmail.com")) {
                         startActivity(new Intent(LoginActivity.this, AdminWelcomePage.class));
                     } else {
                         startActivity(new Intent(LoginActivity.this, CustomerWelcome.class));
