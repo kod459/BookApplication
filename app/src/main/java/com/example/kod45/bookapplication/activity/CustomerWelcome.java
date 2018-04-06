@@ -14,7 +14,7 @@ public class CustomerWelcome extends AppCompatActivity {
 
     FirebaseAuth mAuth;
 
-    Button signOut;
+    Button signOut, searchBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +22,7 @@ public class CustomerWelcome extends AppCompatActivity {
         setContentView(R.layout.activity_customer_welcome);
 
         mAuth = FirebaseAuth.getInstance();
+        searchBooks = (Button) findViewById(R.id.searchBooks);
 
 
         signOut = (Button)findViewById(R.id.signOutCustomer);
@@ -33,6 +34,16 @@ public class CustomerWelcome extends AppCompatActivity {
                 mAuth.signOut();
                 Toast.makeText(getApplicationContext(), "Signing out...", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CustomerWelcome.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+        searchBooks.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CustomerWelcome.this, SearchBooks.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }

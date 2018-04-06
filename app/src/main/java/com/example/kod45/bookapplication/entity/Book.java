@@ -9,35 +9,56 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class Book {
 
-    private String title, author, category, image, price, quantity;
+    String id, title, author, price, category, image, quantity, noOfReviews, rating;
 
-    public Book(String title, String author, String category, String image, String price, String quantity) {
+    public Book(){}
+
+    public Book(String id, String title, String author, String price, String category, String quantity) {
+        this.id = id;
         this.title = title;
         this.author = author;
+        this.price = price;
+        this.category = category;
+        this.quantity = quantity;
+    }
+
+    public Book(String id, String title, String author, String price, String category, String image, String quantity) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.price = price;
         this.category = category;
         this.image = image;
-        this.price = price;
         this.quantity = quantity;
     }
 
-    public Book()
-    {
-
-    }
-
-    public Book(String title, String author, String category, String quantity, String price) {
+    public Book(String id, String title, String author, String price, String category, String quantity, String noOfReviews, String rating, String image) {
+        this.id = id;
         this.title = title;
         this.author = author;
+        this.price = price;
         this.category = category;
         this.quantity = quantity;
-        this.price = price;
+        this.noOfReviews = noOfReviews;
+        this.rating = rating;
+        this.image = image;
     }
 
-    public Book(String title, String author, String category, String price) {
-        this.title = title;
-        this.author = author;
-        this.category = category;
-        this.price = price;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -56,22 +77,6 @@ public class Book {
         this.author = author;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getPrice() {
         return price;
     }
@@ -80,11 +85,35 @@ public class Book {
         this.price = price;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public String getQuantity() {
         return quantity;
     }
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getNoOfReviews() {
+        return noOfReviews;
+    }
+
+    public void setNoOfReviews(String noOfReviews) {
+        this.noOfReviews = noOfReviews;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 }

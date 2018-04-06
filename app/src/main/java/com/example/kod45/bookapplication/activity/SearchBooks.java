@@ -1,5 +1,7 @@
 package com.example.kod45.bookapplication.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -7,9 +9,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 
 import com.example.kod45.bookapplication.R;
+import com.example.kod45.bookapplication.entity.GlobalVariables;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,28 +24,31 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class SearchBooks extends AppCompatActivity {
+import java.util.ArrayList;
 
-    EditText searchBook;
+public class SearchBooks extends AppCompatActivity{
+
+    EditText mSearchEditText;
     RecyclerView recyclerView;
     DatabaseReference mDatabase;
-    DatabaseReference mFirebaseDatabase;
     FirebaseUser firebaseUser;
-    FirebaseAuth mAuth;
+    ArrayList<String> idList;
     ArrayList<String> titleList;
     ArrayList<String> authorList;
     ArrayList<String> categoryList;
     ArrayList<String> priceList;
     ArrayList<String> quantityList;
     ArrayList <String> bookImageList;
+
     SearchAdapter searchAdapter;
+    private static RecyclerViewClickListener itemListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_books);
 
-        searchBook = (EditText) findViewById(R.id.searchBook);
+        mSearchEditText = (EditText) findViewById(R.id.searchBook);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -51,6 +58,7 @@ public class SearchBooks extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
+        idList = new ArrayList<>();
         titleList = new ArrayList<>();
         authorList = new ArrayList<>();
         categoryList = new ArrayList<>();
@@ -58,7 +66,7 @@ public class SearchBooks extends AppCompatActivity {
         quantityList = new ArrayList<>();
         bookImageList = new ArrayList<>();
 
-        searchBook.addTextChangedListener(new TextWatcher() {
+        mSearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {
 
@@ -74,6 +82,7 @@ public class SearchBooks extends AppCompatActivity {
                 if(!s.toString().isEmpty()){
                     setAdapter(s.toString());
                 } else {
+                    idList.clear();
                     titleList.clear();
                     authorList.clear();
                     categoryList.clear();
@@ -92,6 +101,7 @@ public class SearchBooks extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Clear the list for each new search
+                idList.clear();
                 titleList.clear();
                 authorList.clear();
                 categoryList.clear();
@@ -104,6 +114,7 @@ public class SearchBooks extends AppCompatActivity {
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
                     String uid = ds.getKey();
+                    String id = ds.child("id").getValue(String.class);
                     String title = ds.child("title").getValue(String.class);
                     String author = ds.child("author").getValue(String.class);
                     String category = ds.child("category").getValue(String.class);
@@ -112,6 +123,7 @@ public class SearchBooks extends AppCompatActivity {
                     String image = ds.child("image").getValue(String.class);
 
                     if (title.contains(searchedString)){
+                        idList.add(id);
                         titleList.add(title);
                         authorList.add(author);
                         categoryList.add(category);
@@ -120,6 +132,7 @@ public class SearchBooks extends AppCompatActivity {
                         bookImageList.add(image);
                         counter++;
                     } else if (author.contains(searchedString)) {
+                        idList.add(id);
                         titleList.add(title);
                         authorList.add(author);
                         categoryList.add(category);
@@ -128,6 +141,7 @@ public class SearchBooks extends AppCompatActivity {
                         bookImageList.add(image);
                         counter++;
                     } else if (category.contains(searchedString)){
+                        idList.add(id);
                         titleList.add(title);
                         authorList.add(author);
                         categoryList.add(category);
@@ -140,8 +154,15 @@ public class SearchBooks extends AppCompatActivity {
                         break;
                     }
 
-                    searchAdapter = new SearchAdapter(SearchBooks.this, titleList, authorList, categoryList, priceList, quantityList, bookImageList);
+                    searchAdapter = new SearchAdapter(SearchBooks.this, idList, titleList, authorList, categoryList, priceList, quantityList, bookImageList, new RecyclerViewClickListener() {
+                        @Override
+                        public void recyclerViewLisClicked(View v, int position) {
+                            ((GlobalVariables) SearchBooks.this.getApplication()).setCurrentBook(idList.get(position).toString());
+                            startActivity(new Intent(SearchBooks.this, ViewBook.class));
+                        }
+                    });
                     recyclerView.setAdapter(searchAdapter);
+
 
                 }
             }

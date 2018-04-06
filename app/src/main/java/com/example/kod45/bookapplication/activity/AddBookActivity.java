@@ -52,6 +52,8 @@ public class AddBookActivity extends AppCompatActivity {
     private StorageReference storageReference;
     Book book;
 
+    String bookId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class AddBookActivity extends AppCompatActivity {
         storageReference = storage.getReference();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance().getReference("Book");
+        bookId = mFirebaseDatabase.push().getKey();
 
         mAddButton.setOnClickListener(new View.OnClickListener(){
 
@@ -121,8 +124,10 @@ public class AddBookActivity extends AppCompatActivity {
                                 @SuppressWarnings("VisibleForTests")
                                 Uri uri = taskSnapshot.getDownloadUrl();
                                 String imagePath = uri.toString();
+                                String avgRating = "0";
+                                String noOfRatings = "0";
                                 Toast.makeText(AddBookActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                                book = new Book(title, author, selectedCategory, imagePath, price, finalQuantity);
+                                book = new Book(bookID,title, author, price, selectedCategory,finalQuantity, avgRating, noOfRatings, imagePath);
                                 mFirebaseDatabase.child(bookID).setValue(book);
                                 Toast.makeText(getApplicationContext(), "Book Added", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AddBookActivity.this, AdminWelcomePage.class);
