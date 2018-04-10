@@ -29,8 +29,9 @@
         <activity android:name=".activity.AddBookActivity" />
         <activity android:name=".activity.SearchBooks" />
         <activity
-               android:name=".activity.ViewBook"
-               android:windowSoftInputMode="stateHidden|adjustNothing"/>
+            android:name=".activity.ViewBook"
+            android:windowSoftInputMode="stateHidden|adjustNothing" />
+        <activity android:name=".activity.ViewCart"></activity>
     </application>
 
 </manifest>

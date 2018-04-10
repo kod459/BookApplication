@@ -42,7 +42,7 @@ public class AddBookActivity extends AppCompatActivity {
 
     private DatabaseReference mFirebaseDatabase;
 
-    private EditText titleText, authorText, priceText, quantityText;
+    private EditText titleText, authorText, priceText, stockText, quantityText;
     private Button mAddButton, chooseButton;
     private ImageView imageView;
     private Uri filePath;
@@ -80,65 +80,50 @@ public class AddBookActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance().getReference("Book");
         bookId = mFirebaseDatabase.push().getKey();
 
-        mAddButton.setOnClickListener(new View.OnClickListener(){
+        mAddButton.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+                  final String bookID = mFirebaseDatabase.push().getKey();
+                  final String title = titleText.getText().toString();
+                  final String author = authorText.getText().toString();
+                  final Double price = Double.parseDouble(priceText.getText().toString());
 
-            @Override
-            public void onClick(View view) {
-                final String bookID = mFirebaseDatabase.push().getKey();
-                final String title = titleText.getText().toString();
-                final String author = authorText.getText().toString();
-                final String price = priceText.getText().toString();
+                  final String selectedCategory = mSpinner.getSelectedItem().toString();
+                  final int quantity = Integer.parseInt(quantityText.getText().toString());
+                  if (title.equals("")) {
+                      Toast.makeText(getApplicationContext(), "Please enter in a title", Toast.LENGTH_SHORT).show();
+                      return;
+                  } else if (author.equals("")) {
+                      Toast.makeText(getApplicationContext(), "Please enter in a author", Toast.LENGTH_SHORT).show();
+                      return;
+                  } else if (price.equals("")) {
+                      Toast.makeText(getApplicationContext(), "Please enter in a price", Toast.LENGTH_SHORT).show();
+                      return;
+                  } else if (quantity <= 0) {
+                      Toast.makeText(getApplicationContext(), "Stock cannot be 0 or a negative number", Toast.LENGTH_SHORT).show();
+                      return;
+                  } else {
+                      final Double avgRating = 0.00;
+                      final int noOfRatings = 0;
+                      StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+                      ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                          @Override
+                          public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                              @SuppressWarnings("VisibleForTests")
+                              Uri uri = taskSnapshot.getDownloadUrl();
+                              String imagePath = uri.toString();
+                              Toast.makeText(AddBookActivity.this, "Uploaded Image", Toast.LENGTH_SHORT).show();
+                              book = new Book(bookID, title, author, selectedCategory, imagePath, noOfRatings, quantity , price, avgRating);
+                              mFirebaseDatabase.child(bookID).setValue(book);
+                              mAddButton.setVisibility(View.INVISIBLE);
+                              Toast.makeText(getApplicationContext(), "Book added: " + book.getTitle(), Toast.LENGTH_LONG).show();
+                              startActivity(new Intent(AddBookActivity.this, AdminWelcomePage.class));
+                          }
+                      });
+                  }
+              }
+          });
 
-                int quantity = Integer.parseInt(quantityText.getText().toString());
-                final String selectedCategory = mSpinner.getSelectedItem().toString();
-
-                if(title == null)
-                {
-                    Toast.makeText(AddBookActivity.this, "Please enter in a Title", Toast.LENGTH_SHORT).show();
-                }
-                else if (author == null)
-                {
-                    Toast.makeText(AddBookActivity.this, "Please enter in author", Toast.LENGTH_SHORT).show();
-                }
-                else if (price == null)
-                {
-                    Toast.makeText(AddBookActivity.this, "Please enter in a price", Toast.LENGTH_SHORT).show();
-                }
-                else if (quantity <= 0)
-                {
-                    Toast.makeText(AddBookActivity.this, "Please enter in a quantity", Toast.LENGTH_SHORT).show();
-                }
-
-                else
-                {
-
-                }
-                final String finalQuantity = Integer.toString(quantity);
-
-
-                StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
-                ref.putFile(filePath)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                @SuppressWarnings("VisibleForTests")
-                                Uri uri = taskSnapshot.getDownloadUrl();
-                                String imagePath = uri.toString();
-                                String avgRating = "0";
-                                String noOfRatings = "0";
-                                Toast.makeText(AddBookActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                                book = new Book(bookID,title, author, price, selectedCategory,finalQuantity, avgRating, noOfRatings, imagePath);
-                                mFirebaseDatabase.child(bookID).setValue(book);
-                                Toast.makeText(getApplicationContext(), "Book Added", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(AddBookActivity.this, AdminWelcomePage.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                            }
-                        });
-
-
-            }
-        });
 
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override

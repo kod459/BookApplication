@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.kod45.bookapplication.R;
 import com.example.kod45.bookapplication.entity.Book;
+import com.example.kod45.bookapplication.entity.Cart;
 import com.example.kod45.bookapplication.entity.Comment;
 import com.example.kod45.bookapplication.entity.GlobalVariables;
 import com.example.kod45.bookapplication.entity.User;
@@ -169,7 +170,6 @@ public class ViewBook extends AppCompatActivity {
     }
 
     public void leaveCommentRating(){
-
         final int rate = rating.getProgress();
 
         if(rate == 0){
@@ -182,8 +182,8 @@ public class ViewBook extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         Book book = ds.getValue(Book.class);
-                        String noOfRatings = book.getNoOfReviews();
-                        String rating = book.getRating();
+                        int noOfRatings = book.getNoOfReviews();
+                        double rating = book.getRating();
 
                         Double oldRating = Double.valueOf(rating);
                         int oldNoOfRatings = Integer.valueOf(noOfRatings);
@@ -229,12 +229,13 @@ public class ViewBook extends AppCompatActivity {
         String title = mTitle.getText().toString();
         String author = mAuthor.getText().toString();
         String category = mCategory.getText().toString();
-        String price = mPrice.getText().toString();
-        String quantity = "1";
-
-        Book book = new Book(bookID, title, author, category, price, quantity, image);
-        mCartRef.child(fbUser.getUid()).child(cartID).setValue(book);
-        Toast.makeText(getApplicationContext(), "Added " + book.getTitle() + " to cart", Toast.LENGTH_LONG).show();
+        Double price = Double.parseDouble(mPrice.getText().toString());
+        int quantity = Integer.parseInt(mQuantity.getText().toString());
+        int finalQuantity = quantity - quantity + 1;
+        Double total = price;
+        Cart cart = new Cart(userName, bookID, title, author, category, cartID, finalQuantity, price, total, image);
+        mCartRef.child(fbUser.getUid()).child(cartID).setValue(cart);
+        Toast.makeText(getApplicationContext(), "Added " + cart.getTitle() + " to cart", Toast.LENGTH_LONG).show();
         if (userName.equalsIgnoreCase("Admin")) {
             startActivity(new Intent(ViewBook.this, AdminWelcomePage.class));
         } else {
@@ -247,10 +248,11 @@ public class ViewBook extends AppCompatActivity {
         String newTitle = eTitle.getText().toString();
         String newAuthor = eAuthor.getText().toString();
         String newCategory = spinner.getSelectedItem().toString();
-        String newPrice = ePrice.getText().toString();
+        Double newPrice = Double.parseDouble(ePrice.getText().toString());
         int quantity = Integer.parseInt(eQuantity.getText().toString());
 
         String newQuantity = Integer.toString(quantity);
+        String newPrices = Double.toString(newPrice);
         mBookRef.child(bookID).child("title").setValue(newTitle);
         mBookRef.child(bookID).child("author").setValue(newAuthor);
         mBookRef.child(bookID).child("category").setValue(newCategory);
@@ -262,7 +264,7 @@ public class ViewBook extends AppCompatActivity {
         mTitle.setText(newTitle);
         mAuthor.setText(newAuthor);
         mCategory.setText(newCategory);
-        mPrice.setText(newPrice);
+        mPrice.setText(newPrices);
         mQuantity.setText(newQuantity);
 
     }
@@ -278,26 +280,28 @@ public class ViewBook extends AppCompatActivity {
                     mTitle.setText(book.getTitle());
                     mAuthor.setText(book.getAuthor());
                     mCategory.setText(book.getCategory());
-                    mPrice.setText(book.getPrice());
-                    mQuantity.setText(book.getQuantity());
-                    displayRating.setRating(Float.parseFloat(book.getRating()));
+                    mPrice.setText(String.valueOf(book.getPrice()));
+                    mQuantity.setText(String.valueOf(book.getQuantity()));
+
+                    displayRating.setRating(Float.parseFloat(book.getRating().toString()));
 
                     title = book.getTitle();
                     image = book.getImage();
 
                     eTitle.setText(book.getTitle(), TextView.BufferType.EDITABLE);
                     eAuthor.setText(book.getAuthor(), TextView.BufferType.EDITABLE);
-                    ePrice.setText(book.getPrice(), TextView.BufferType.EDITABLE);
-                    eQuantity.setText(book.getQuantity(), TextView.BufferType.EDITABLE);
+                    ePrice.setText(String.valueOf(book.getPrice()), TextView.BufferType.EDITABLE);
+                    eQuantity.setText(String.valueOf(book.getQuantity()), TextView.BufferType.EDITABLE);
                     Picasso.with(context).load(image).fit().placeholder(R.mipmap.ic_launcher_round).into(mImageView);
 
                     int pos = 0;
-                    final String categoryOptions[] = new String[]{book.getCategory(), "Horror", "Fiction", "Non-fiction", "History", "Biography", "Education"};
+                    final String categoryOptions[] = new String[]{book.getCategory(), "Horror", "Fiction", "Non-fiction", "History", "Auto-Biography", "Biography"};
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ViewBook.this, android.R.layout.simple_spinner_dropdown_item, categoryOptions);
                     spinner.setAdapter(arrayAdapter);
                     spinner.setSelection(pos);
                 }
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

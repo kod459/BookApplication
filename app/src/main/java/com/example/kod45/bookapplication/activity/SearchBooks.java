@@ -118,8 +118,8 @@ public class SearchBooks extends AppCompatActivity{
                     String title = ds.child("title").getValue(String.class);
                     String author = ds.child("author").getValue(String.class);
                     String category = ds.child("category").getValue(String.class);
-                    String price = ds.child("price").getValue(String.class);
-                    String quantity = ds.child("quantity").getValue(String.class);
+                    String price = ds.child("price").getValue(Double.class).toString();
+                    String quantity = ds.child("quantity").getValue(Integer.class).toString();
                     String image = ds.child("image").getValue(String.class);
 
                     if (title.contains(searchedString)){

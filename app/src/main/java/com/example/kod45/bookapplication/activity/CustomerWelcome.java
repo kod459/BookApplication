@@ -14,7 +14,7 @@ public class CustomerWelcome extends AppCompatActivity {
 
     FirebaseAuth mAuth;
 
-    Button signOut, searchBooks;
+    Button signOut, searchBooks, viewCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,7 @@ public class CustomerWelcome extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         searchBooks = (Button) findViewById(R.id.searchBooks);
+        viewCart = (Button) findViewById(R.id.viewCart);
 
 
         signOut = (Button)findViewById(R.id.signOutCustomer);
@@ -46,6 +47,13 @@ public class CustomerWelcome extends AppCompatActivity {
                 Intent intent = new Intent(CustomerWelcome.this, SearchBooks.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+            }
+        });
+
+        viewCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CustomerWelcome.this, ViewCart.class));
             }
         });
 

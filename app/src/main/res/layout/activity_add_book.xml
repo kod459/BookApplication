@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.kod45.bookapplication.activity.AddBookActivity">
-
     <TextView
         android:id="@+id/titleTV"
         android:layout_width="wrap_content"
