@@ -33,7 +33,8 @@
             android:windowSoftInputMode="stateHidden|adjustNothing" />
         <activity android:name=".activity.ViewCart" />
         <activity android:name=".activity.AddPurchaseDetails" />
-        <activity android:name=".activity.FinalPurchase"></activity>
+        <activity android:name=".activity.FinalPurchase" />
+        <activity android:name=".activity.SearchUsers"></activity>
     </application>
 
 </manifest>
