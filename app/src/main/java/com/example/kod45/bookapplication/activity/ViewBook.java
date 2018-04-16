@@ -63,7 +63,6 @@ public class ViewBook extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         fbUser = mAuth.getCurrentUser();
 
-        //TextView
         mTitle = (TextView) findViewById(R.id.viewTitle);
         mAuthor = (TextView) findViewById(R.id.viewAuthor);
         mCategory = (TextView) findViewById(R.id.viewCategory);
@@ -71,21 +70,15 @@ public class ViewBook extends AppCompatActivity {
         mQuantity = (TextView) findViewById(R.id.viewQuantity);
         quantityTV = (TextView) findViewById(R.id.quantityTV);
         noComments = (TextView) findViewById(R.id.noComments);
-
-        //EditText
         eTitle = (EditText) findViewById(R.id.editTitle);
         eAuthor = (EditText) findViewById(R.id.editAuthor);
         ePrice = (EditText) findViewById(R.id.editPrice);
         eQuantity = (EditText) findViewById(R.id.editQuantity);
         mComment = (EditText) findViewById(R.id.editComment);
-
-        //Buttons
         bEdit = (Button) findViewById(R.id.editBtn);
         bSave = (Button) findViewById(R.id.saveBtn);
         bAddToCart = (Button) findViewById(R.id.addToCartBtn);
         bPostReview = (Button) findViewById(R.id.postReviewBtn);
-
-        //ProgressBar & Spinner & ListView & ImageView
         mImageView = (ImageView) findViewById(R.id.imageView);
         rating = (RatingBar) findViewById(R.id.ratingBar);
         spinner = (Spinner) findViewById(R.id.spinner);
@@ -170,6 +163,7 @@ public class ViewBook extends AppCompatActivity {
     }
 
     public void leaveCommentRating(){
+
         final int rate = rating.getProgress();
 
         if(rate == 0){
@@ -183,17 +177,11 @@ public class ViewBook extends AppCompatActivity {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         Book book = ds.getValue(Book.class);
                         int noOfRatings = book.getNoOfReviews();
-                        double rating = book.getRating();
+                        Double rating = book.getRating();
 
-                        Double oldRating = Double.valueOf(rating);
-                        int oldNoOfRatings = Integer.valueOf(noOfRatings);
+                        noOfRatings++;
 
-                        oldNoOfRatings++;
-
-                        Float newRating = (float)((rate + oldRating) / oldNoOfRatings);
-
-                        String savedRating = String.valueOf(newRating);
-                        String savedNoOfRatings = String.valueOf(oldNoOfRatings);
+                        Double newRating = (rate + rating) / noOfRatings;
 
                         mCommentRef = FirebaseDatabase.getInstance().getReference("Comment");
 
@@ -204,16 +192,16 @@ public class ViewBook extends AppCompatActivity {
                         Comment com = new Comment(userName, title, sRate, comment, bookID);
                         mCommentRef = FirebaseDatabase.getInstance().getReference("Comment");
                         mCommentRef.child(bookID).child(commentID).setValue(com);
-                        mBookRef.child(bookID).child("noOfReviews").setValue(savedNoOfRatings);
-                        mBookRef.child(bookID).child("rating").setValue(savedRating);
+                        mBookRef.child(bookID).child("noOfReviews").setValue(noOfRatings);
+                        mBookRef.child(bookID).child("rating").setValue(newRating);
                         Toast.makeText(getApplicationContext(), "You gave a rating of " + sRate, Toast.LENGTH_LONG).show();
                         if (userName.equalsIgnoreCase("Admin")) {
                             startActivity(new Intent(ViewBook.this, AdminWelcomePage.class));
+                        } else {
+                            startActivity(new Intent(ViewBook.this, CustomerWelcome.class));
                         }
-                        startActivity(new Intent(ViewBook.this, CustomerWelcome.class));
                     }
                 }
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
@@ -231,9 +219,9 @@ public class ViewBook extends AppCompatActivity {
         String category = mCategory.getText().toString();
         Double price = Double.parseDouble(mPrice.getText().toString());
         int quantity = Integer.parseInt(mQuantity.getText().toString());
-        int finalQuantity = quantity - quantity + 1;
-        Double total = price;
-        Cart cart = new Cart(userName, bookID, title, author, category, cartID, finalQuantity, price, total, image);
+        Double total = price*quantity;
+
+        Cart cart = new Cart(userName, bookID, title, author, category, cartID, quantity, price, total, image);
         mCartRef.child(fbUser.getUid()).child(cartID).setValue(cart);
         Toast.makeText(getApplicationContext(), "Added " + cart.getTitle() + " to cart", Toast.LENGTH_LONG).show();
         if (userName.equalsIgnoreCase("Admin")) {
@@ -242,17 +230,15 @@ public class ViewBook extends AppCompatActivity {
             startActivity(new Intent(ViewBook.this, CustomerWelcome.class));
         }
     }
-
     public void saveBookDetails(){
 
         String newTitle = eTitle.getText().toString();
         String newAuthor = eAuthor.getText().toString();
         String newCategory = spinner.getSelectedItem().toString();
-        Double newPrice = Double.parseDouble(ePrice.getText().toString());
+        String newPrice = ePrice.getText().toString();
         int quantity = Integer.parseInt(eQuantity.getText().toString());
 
         String newQuantity = Integer.toString(quantity);
-        String newPrices = Double.toString(newPrice);
         mBookRef.child(bookID).child("title").setValue(newTitle);
         mBookRef.child(bookID).child("author").setValue(newAuthor);
         mBookRef.child(bookID).child("category").setValue(newCategory);
@@ -264,7 +250,7 @@ public class ViewBook extends AppCompatActivity {
         mTitle.setText(newTitle);
         mAuthor.setText(newAuthor);
         mCategory.setText(newCategory);
-        mPrice.setText(newPrices);
+        mPrice.setText(newPrice);
         mQuantity.setText(newQuantity);
 
     }
@@ -282,7 +268,7 @@ public class ViewBook extends AppCompatActivity {
                     mCategory.setText(book.getCategory());
                     mPrice.setText(String.valueOf(book.getPrice()));
                     mQuantity.setText(String.valueOf(book.getQuantity()));
-
+                    mQuantity.setText("1");
                     displayRating.setRating(Float.parseFloat(book.getRating().toString()));
 
                     title = book.getTitle();
@@ -301,7 +287,6 @@ public class ViewBook extends AppCompatActivity {
                     spinner.setSelection(pos);
                 }
             }
-
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

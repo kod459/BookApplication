@@ -8,16 +8,17 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class User {
-    private String name, email, password, paymentDetails, shippingDetails;
+    private String name, email, password, creditNumber, address, type;
 
     public User() {}
 
-    public User(String name, String email, String password, String paymentDetails, String shippingDetails) {
+    public User(String name, String email, String password, String paymentDetails, String shippingDetails, String type) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.paymentDetails = paymentDetails;
-        this.shippingDetails = shippingDetails;
+        this.creditNumber = paymentDetails;
+        this.address = shippingDetails;
+        this.type = type;
     }
 
     public User(String name, String email, String password) {
@@ -50,19 +51,27 @@ public class User {
         this.password = password;
     }
 
-    public String getPaymentDetails() {
-        return paymentDetails;
+    public String getCreditNumber() {
+        return creditNumber;
     }
 
-    public void setPaymentDetails(String paymentDetails) {
-        this.paymentDetails = paymentDetails;
+    public void setCreditNumber(String creditNumber) {
+        this.creditNumber = creditNumber;
     }
 
-    public String getShippingDetails() {
-        return shippingDetails;
+    public String getAddress() {
+        return address;
     }
 
-    public void setShippingDetails(String shippingDetails) {
-        this.shippingDetails = shippingDetails;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

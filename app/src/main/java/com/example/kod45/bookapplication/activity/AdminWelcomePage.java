@@ -86,6 +86,13 @@ public class AdminWelcomePage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        viewCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AdminWelcomePage.this, ViewCart.class));
+            }
+        });
     }
     public void getAllBooks(){
         mFirebaseRef = FirebaseDatabase.getInstance().getReference("Book");

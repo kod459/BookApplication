@@ -1,5 +1,6 @@
 package com.example.kod45.bookapplication.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -52,6 +53,13 @@ public class ViewCart extends AppCompatActivity {
         mCartRV.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         addCartItems();
+
+        mProceedToPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ViewCart.this, AddPurchaseDetails.class));
+            }
+        });
     }
 
     public void addCartItems(){

@@ -60,15 +60,15 @@ public class AddBookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
 
-        titleText = (EditText)findViewById(R.id.TitleAdd);
-        authorText = (EditText)findViewById(R.id.AuthorAdd);
+        titleText = (EditText) findViewById(R.id.TitleAdd);
+        authorText = (EditText) findViewById(R.id.AuthorAdd);
         mSpinner = (Spinner) findViewById(R.id.spinner);
-        priceText = (EditText)findViewById(R.id.PriceAdd);
-        quantityText = (EditText)findViewById(R.id.QuantityAdd);
+        priceText = (EditText) findViewById(R.id.PriceAdd);
+        quantityText = (EditText) findViewById(R.id.QuantityAdd);
 
-        mAddButton = (Button)findViewById(R.id.addBook);
-        chooseButton = (Button)findViewById(R.id.chooseImage);
-        imageView = (ImageView)findViewById(R.id.imageView);
+        mAddButton = (Button) findViewById(R.id.addBook);
+        chooseButton = (Button) findViewById(R.id.chooseImage);
+        imageView = (ImageView) findViewById(R.id.imageView);
 
         final String[] category = getResources().getStringArray(R.array.categories);
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, category);
@@ -81,48 +81,48 @@ public class AddBookActivity extends AppCompatActivity {
         bookId = mFirebaseDatabase.push().getKey();
 
         mAddButton.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                  final String bookID = mFirebaseDatabase.push().getKey();
-                  final String title = titleText.getText().toString();
-                  final String author = authorText.getText().toString();
-                  final Double price = Double.parseDouble(priceText.getText().toString());
+            @Override
+            public void onClick(View view) {
+                final String bookID = mFirebaseDatabase.push().getKey();
+                final String title = titleText.getText().toString();
+                final String author = authorText.getText().toString();
+                final Double price = Double.parseDouble(priceText.getText().toString());
 
-                  final String selectedCategory = mSpinner.getSelectedItem().toString();
-                  final int quantity = Integer.parseInt(quantityText.getText().toString());
-                  if (title.equals("")) {
-                      Toast.makeText(getApplicationContext(), "Please enter in a title", Toast.LENGTH_SHORT).show();
-                      return;
-                  } else if (author.equals("")) {
-                      Toast.makeText(getApplicationContext(), "Please enter in a author", Toast.LENGTH_SHORT).show();
-                      return;
-                  } else if (price.equals("")) {
-                      Toast.makeText(getApplicationContext(), "Please enter in a price", Toast.LENGTH_SHORT).show();
-                      return;
-                  } else if (quantity <= 0) {
-                      Toast.makeText(getApplicationContext(), "Stock cannot be 0 or a negative number", Toast.LENGTH_SHORT).show();
-                      return;
-                  } else {
-                      final Double avgRating = 0.00;
-                      final int noOfRatings = 0;
-                      StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
-                      ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                          @Override
-                          public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                              @SuppressWarnings("VisibleForTests")
-                              Uri uri = taskSnapshot.getDownloadUrl();
-                              String imagePath = uri.toString();
-                              Toast.makeText(AddBookActivity.this, "Uploaded Image", Toast.LENGTH_SHORT).show();
-                              book = new Book(bookID, title, author, selectedCategory, imagePath, noOfRatings, quantity , price, avgRating);
-                              mFirebaseDatabase.child(bookID).setValue(book);
-                              mAddButton.setVisibility(View.INVISIBLE);
-                              Toast.makeText(getApplicationContext(), "Book added: " + book.getTitle(), Toast.LENGTH_LONG).show();
-                              startActivity(new Intent(AddBookActivity.this, AdminWelcomePage.class));
-                          }
-                      });
-                  }
-              }
-          });
+                final String selectedCategory = mSpinner.getSelectedItem().toString();
+                final int quantity = Integer.parseInt(quantityText.getText().toString());
+                if (title.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter in a title", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (author.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter in a author", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (price.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter in a price", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (quantity <= 0) {
+                    Toast.makeText(getApplicationContext(), "Stock cannot be 0 or a negative number", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    final Double avgRating = 0.00;
+                    final int noOfRatings = 0;
+                    StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+                    ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            @SuppressWarnings("VisibleForTests")
+                            Uri uri = taskSnapshot.getDownloadUrl();
+                            String imagePath = uri.toString();
+                            Toast.makeText(AddBookActivity.this, "Uploaded Image", Toast.LENGTH_SHORT).show();
+                            book = new Book(bookID, title, author, selectedCategory, imagePath, noOfRatings, quantity, price, avgRating);
+                            mFirebaseDatabase.child(bookID).setValue(book);
+                            mAddButton.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getApplicationContext(), "Book added: " + book.getTitle(), Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(AddBookActivity.this, AdminWelcomePage.class));
+                        }
+                    });
+                }
+            }
+        });
 
 
         chooseButton.setOnClickListener(new View.OnClickListener() {
@@ -133,15 +133,6 @@ public class AddBookActivity extends AppCompatActivity {
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
-
-    }
-
-    private void chooseFile()
-    {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

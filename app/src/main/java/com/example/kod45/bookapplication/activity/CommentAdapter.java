@@ -16,14 +16,9 @@ import android.widget.TextView;
 
 import com.example.kod45.bookapplication.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.util.Map;
-
-/**
- * Created by cianm on 05/04/2018.
- */
 
 public class CommentAdapter extends SimpleAdapter {
 

@@ -2,8 +2,7 @@ package com.example.kod45.bookapplication.entity;
 
 /**
  * Created by kod45 on 06/04/2018.
- */
-public class Comment {
+ */public class Comment {
 
     String userName, bookTitle, rating, comment, bookId;
 

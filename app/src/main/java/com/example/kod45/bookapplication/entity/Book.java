@@ -9,7 +9,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class Book {
 
-    String id, title, author, category, image;
+    String id, title, author, category, image, creditCardNumber, address;
     int noOfReviews, quantity;
     Double price, rating;
 
@@ -21,6 +21,20 @@ public class Book {
         this.author = author;
         this.category = category;
         this.image = image;
+        this.noOfReviews = noOfReviews;
+        this.quantity = quantity;
+        this.price = price;
+        this.rating = rating;
+    }
+
+    public Book(String id, String title, String author, String category, String image, String creditCardNumber, String address, int noOfReviews, int quantity, Double price, Double rating) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.category = category;
+        this.image = image;
+        this.creditCardNumber = creditCardNumber;
+        this.address = address;
         this.noOfReviews = noOfReviews;
         this.quantity = quantity;
         this.price = price;
