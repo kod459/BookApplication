@@ -1,4 +1,4 @@
-package com.example.kod45.bookapplication.activity;
+package com.example.kod45.bookapplication.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.example.kod45.bookapplication.activity;
+package com.example.kod45.bookapplication.adapters;
 
 /**
  * Created by kod45 on 16/04/2018.
@@ -8,10 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kod45.bookapplication.R;
+import com.example.kod45.bookapplication.activity.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 

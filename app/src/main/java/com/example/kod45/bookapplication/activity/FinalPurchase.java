@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.kod45.bookapplication.R;
+import com.example.kod45.bookapplication.adapters.PurchaseAdapter;
 import com.example.kod45.bookapplication.entity.Book;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

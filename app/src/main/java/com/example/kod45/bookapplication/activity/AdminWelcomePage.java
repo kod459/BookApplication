@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.kod45.bookapplication.R;
+import com.example.kod45.bookapplication.adapters.ViewAllBooksAdapter;
 import com.example.kod45.bookapplication.entity.Book;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -101,7 +102,6 @@ public class AdminWelcomePage extends AppCompatActivity {
                 startActivity(new Intent(AdminWelcomePage.this, SearchUsers.class));
             }
         });
-
 
     }
     public void getAllBooks(){

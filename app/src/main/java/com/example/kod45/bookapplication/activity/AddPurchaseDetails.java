@@ -82,23 +82,37 @@ public class AddPurchaseDetails extends AppCompatActivity {
                 }
 
                 String creditNumber = creditCardNumber.getText().toString();
-                String address = shippingAddress.getText().toString();
+                if(creditNumber.length() < 16 && !creditNumber.matches("[0-9]+"))
+                {
+                    Toast.makeText(getApplicationContext(), "Invalid Card Details", Toast.LENGTH_LONG).show();
 
-                String name = user.getName();
-                String email = user.getEmail();
-                String password = user.getPassword();
+                }
+                else if(!creditNumber.matches("[0-9]+"))
+                {
+                    Toast.makeText(getApplicationContext(), "Card Number contain numbers", Toast.LENGTH_LONG).show();
+                }
+                else if(creditNumber.length() <16)
+                {
+                    Toast.makeText(getApplicationContext(), "Card must have 16 numbers", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    String address = shippingAddress.getText().toString();
 
-                mUserRef.child(fbUser.getUid()).child("name").setValue(name);
-                mUserRef.child(fbUser.getUid()).child("email").setValue(email);
-                mUserRef.child(fbUser.getUid()).child("password").setValue(password);
-                mUserRef.child(fbUser.getUid()).child("creditNumber").setValue(creditNumber);
-                mUserRef.child(fbUser.getUid()).child("address").setValue(address);
-                mUserRef.child(fbUser.getUid()).child("type").setValue(type);
+                    String name = user.getName();
+                    String email = user.getEmail();
+                    String password = user.getPassword();
 
-                Toast.makeText(getApplicationContext(), "Details added for:" + user.getName(), Toast.LENGTH_LONG).show();
+                    mUserRef.child(fbUser.getUid()).child("name").setValue(name);
+                    mUserRef.child(fbUser.getUid()).child("email").setValue(email);
+                    mUserRef.child(fbUser.getUid()).child("password").setValue(password);
+                    mUserRef.child(fbUser.getUid()).child("creditNumber").setValue(creditNumber);
+                    mUserRef.child(fbUser.getUid()).child("address").setValue(address);
+                    mUserRef.child(fbUser.getUid()).child("type").setValue(type);
 
-                startActivity(new Intent(AddPurchaseDetails.this, FinalPurchase.class));
+                    Toast.makeText(getApplicationContext(), "Details added for:" + user.getName(), Toast.LENGTH_LONG).show();
 
+                    startActivity(new Intent(AddPurchaseDetails.this, FinalPurchase.class));
+                }
 
             }
 

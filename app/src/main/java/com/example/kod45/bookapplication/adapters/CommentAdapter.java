@@ -1,4 +1,4 @@
-package com.example.kod45.bookapplication.activity;
+package com.example.kod45.bookapplication.adapters;
 
 /**
  * Created by kod45 on 06/04/2018.

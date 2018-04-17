@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.kod45.bookapplication.R;
+import com.example.kod45.bookapplication.adapters.UserSearchAdapter;
 import com.example.kod45.bookapplication.entity.GlobalVariables;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
